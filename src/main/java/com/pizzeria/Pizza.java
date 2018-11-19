@@ -8,21 +8,29 @@ package com.pizzeria;
 public class Pizza {
 
 	//creation des attributs
-	int id;
-	String code;
-	String designation;
-	double prix;
+	private int id;
+	private String code;
+	private String designation;
+	private double prix;
 	
 	
 	//generation du constructeur
 	public Pizza(int id, String code, String designation, double prix) {
-		super();
 		this.id = id;
 		this.code = code;
 		this.designation = designation;
 		this.prix = prix;
 	}
 
+	
+	public Pizza(String code, String designation, double prix) {
+		this.id = id++;
+		this.code = code;
+		this.designation = designation;
+		this.prix = prix;
+	}
+	
+	
 	
 	//generation des accesseurs
 	public int getId() {
@@ -64,6 +72,11 @@ public class Pizza {
 		this.prix = prix;
 	}
 
+
+	@Override
+	public String toString() {
+		return code + " -> " + designation + " (" + prix + "€)";
+	}
 	
 	
 }
