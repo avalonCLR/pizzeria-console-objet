@@ -22,18 +22,8 @@ public class PizzeriaAdminConsoleApp {
 		int choice = sc.nextInt();
 
 		// CREATE
-		// creation du tableau
-
-		int tailleTab = 8;
-		Pizza[] pizzas = new Pizza[tailleTab];
-		pizzas[0] = new Pizza("PEP", "Pépéroni", 12.50);
-		pizzas[1] = new Pizza("MAR", "Margherita", 14.00);
-		pizzas[2] = new Pizza("REIN", "La Reine", 11.50);
-		pizzas[3] = new Pizza("FRO", "La 4 fromages", 12.00);
-		pizzas[4] = new Pizza("CAN", "La cannibale", 12.50);
-		pizzas[5] = new Pizza("SAV", "La savoyarde", 13.00);
-		pizzas[6] = new Pizza("ORI", "L'orientale", 13.50);
-		pizzas[7] = new Pizza("IND", "L'indienne", 14.00);
+		
+		PizzaMemDao dao = new PizzaMemDao();
 
 		String code;
 		String nom;
@@ -47,9 +37,8 @@ public class PizzeriaAdminConsoleApp {
 
 				// READ
 				// affichage des pizzas
-				for (Pizza p : pizzas) {
-					System.out.println(p.toString());
-				}
+				
+				dao.findAllPizzas();
 
 				menuConsole();
 				choice = sc.nextInt();
@@ -68,15 +57,10 @@ public class PizzeriaAdminConsoleApp {
 				System.out.println("Saisir le prix:");
 				prix = sc.nextDouble();
 
-				tailleTab++;
-				Pizza[] tmp = new Pizza[tailleTab];
-				for (int i = 0; i < pizzas.length; i++) {
-					tmp[i] = pizzas[i];
-				}
-				pizzas = tmp;
 
-				pizzas[tailleTab - 1] = new Pizza(code, nom, prix);
-
+				dao.addPizza(new Pizza(code, nom, prix));
+				
+				
 				System.out.println("Nouvelle pizza ajoutée");
 
 				menuConsole();
@@ -101,15 +85,7 @@ public class PizzeriaAdminConsoleApp {
 
 				// parcours le tableau sans utiliser l'id
 
-				for (Pizza p : pizzas) {
-
-					if (oldCode.equals(p.getCode())) {
-						p.setCode(newCode);
-						p.setDesignation(newName);
-						p.setPrix(newPrice);
-					}
-
-				}
+				dao.updatePizza(oldCode, new Pizza(newCode, newName, newPrice));
 
 				System.out.println("Mise à jour effectuée");
 				menuConsole();
@@ -125,20 +101,7 @@ public class PizzeriaAdminConsoleApp {
 				sc.nextLine();
 				String oldCode = sc.nextLine();
 
-				tailleTab--;
-				Pizza[] tmp = new Pizza[tailleTab];
-				
-				int i=0;
-					for (Pizza p : pizzas) {
-
-						if (!oldCode.equals(p.getCode())) {
-							tmp[i] = p;
-							i++;
-						}
-
-					}pizzas = tmp;
-				
-				
+				dao.deletePizza(oldCode);
 
 				System.out.println("Pizza supprimée");
 

@@ -9,37 +9,25 @@ public class Pizza {
 
 	//creation des attributs
 	private int id;
-	private String code;
-	private String designation;
+	private String code = null;
+	private String designation = null;
 	private double prix;
+	
+	private static int lastId = -1;
 	
 	
 	//generation du constructeur
-	public Pizza(int id, String code, String designation, double prix) {
-		this.id = id;
-		this.code = code;
-		this.designation = designation;
-		this.prix = prix;
-	}
-
-	
 	public Pizza(String code, String designation, double prix) {
-		this.id = id++;
+		this.id = ++lastId;
 		this.code = code;
 		this.designation = designation;
 		this.prix = prix;
 	}
-	
 	
 	
 	//generation des accesseurs
 	public int getId() {
 		return id;
-	}
-
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 
