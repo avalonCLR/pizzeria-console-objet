@@ -47,6 +47,7 @@ public class PizzeriaAdminConsoleApp {
 				System.out.println("Ajout d'une nouvelle pizza");
 
 				// ADD
+				//ajouter une pizza
 				System.out.println("Saisir le code:");
 				sc.nextLine();
 				code = sc.nextLine();
@@ -57,9 +58,7 @@ public class PizzeriaAdminConsoleApp {
 				System.out.println("Saisir le prix:");
 				prix = sc.nextDouble();
 
-
-				dao.addPizza(new Pizza(code, nom, prix));
-				
+				dao.saveNewPizza(new Pizza(code, nom, prix));
 				
 				System.out.println("Nouvelle pizza ajoutée");
 
@@ -70,6 +69,7 @@ public class PizzeriaAdminConsoleApp {
 				System.out.println("Mise à jour d'une pizza");
 
 				// UPDATE
+				//modifier une pizza existante
 				System.out.println("Saisir le code de la pizza à modifier");
 				sc.nextLine();
 				String oldCode = sc.nextLine();
@@ -94,7 +94,7 @@ public class PizzeriaAdminConsoleApp {
 			if (choice == 4) {
 
 				// DELETE
-
+				//effacer une pizza existante
 				System.out.println("Suppression d'une pizza");
 
 				System.out.println("Saisir le code de la pizza à modifier");
@@ -107,7 +107,25 @@ public class PizzeriaAdminConsoleApp {
 
 				menuConsole();
 				choice = sc.nextInt();
-			} else {
+			} 
+			if(choice == 5) {
+				
+				//lister les pizzas par prix decroissant
+				dao.sortPizzasByPriceReversed();
+				
+				menuConsole();
+				choice = sc.nextInt();
+			}
+			if(choice == 6) {
+			
+				//lister les pizzas par code croissant
+				dao.sortPizzasByCode();
+				
+				
+				menuConsole();
+				choice = sc.nextInt();
+			}
+			else {
 				System.out.println("Please make a choice:");
 				menuConsole();
 				choice = sc.nextInt();
@@ -118,12 +136,16 @@ public class PizzeriaAdminConsoleApp {
 
 	}
 
+	
+	//affichage menu
 	public static void menuConsole() {
 		System.out.println("***Pizzeria Administration***");
 		System.out.println("[1] Lister les pizzas");
 		System.out.println("[2] Ajouter une nouvelle pizza");
 		System.out.println("[3] Mettre à jour une pizza");
 		System.out.println("[4] Supprimer une pizza");
+		System.out.println("[5] Lister par prix décroissant");
+		System.out.println("[6] Lister par code croissant");
 		System.out.println("[99] Sortir");
 	}
 

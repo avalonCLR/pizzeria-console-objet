@@ -1,10 +1,16 @@
 package com.pizzeria;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public class PizzaMemDao implements IPizzaDao {
 
-	
-	static int tailleTab = 8;
-	static Pizza[] pizzas = new Pizza[tailleTab];
+	//init pizzas in an array
+	private static int tailleTab = 8;
+	private static Pizza[] pizzas = new Pizza[tailleTab];
 	{
 	pizzas[0] = new Pizza("PEP", "Pépéroni", 12.50);
 	pizzas[1] = new Pizza("MAR", "Margherita", 14.00);
@@ -16,17 +22,47 @@ public class PizzaMemDao implements IPizzaDao {
 	pizzas[7] = new Pizza("IND", "L'indienne", 14.00);
 	}
 	
-
-	public Pizza[] findAllPizzas() {
-		for (Pizza p : pizzas) {
+	//put array in an arraylist
+	List<Pizza> pizzaList = new ArrayList<Pizza>(Arrays.asList(pizzas));
+	
+	//find all pizza and display them
+	public List<Pizza> findAllPizzas() {
+		for (Pizza p : pizzaList) {
 			System.out.println(p.toString());
 		}
-		return pizzas;
+		return pizzaList;
 	}
 
+	//find pizza by code and display
+	public Pizza findPizzaByCode(String codePizza) {
+		for (Pizza p : pizzaList) {
+			if (codePizza.equals(p.getCode())) {
+				return p;
+			}
+		}
+		return null;
+	}
+	
+	//check if the pizza exists
+	public boolean pizzaExists(String codePizza) {
+		
+		for (Pizza p : pizzaList) {
+			if (codePizza.equals(p.getCode())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	//add a new pizza
+	public void saveNewPizza(Pizza pizza) {
+		pizzaList.add(pizza);
+	}
+
+	//modify existing pizza
 	public void updatePizza(String codePizza, Pizza pizza) {
 		
-		if(isPizzaExists(codePizza)==true) {
+		if(pizzaExists(codePizza)==true) {
 		Pizza p = findPizzaByCode(codePizza);
 		
 		p.setCode(pizza.getCode());
@@ -37,51 +73,34 @@ public class PizzaMemDao implements IPizzaDao {
 		}		
 	}
 
-	public Pizza findPizzaByCode(String codePizza) {
-		for (Pizza p : pizzas) {
-			if (codePizza.equals(p.getCode())) {
-				return p;
-			}
-		}
-		return null;
-	}
-
-	public boolean isPizzaExists(String codePizza) {
-		for (Pizza p : pizzas) {
-			if (codePizza.equals(p.getCode())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public void addPizza(Pizza pizza) {
-		tailleTab++;
-		Pizza[] tmp = new Pizza[tailleTab];
-		for (int i = 0; i < pizzas.length; i++) {
-			tmp[i] = pizzas[i];
-		}
-		pizzas = tmp;
-		pizzas[tailleTab - 1] = pizza;
-		
-	}
-
+	//delete pizza
 	public void deletePizza(String codePizza) {
-		tailleTab--;
-		Pizza[] tmp = new Pizza[tailleTab];
-		
-		int i=0;
-			for (Pizza p : pizzas) {
-
-				if (!codePizza.equals(p.getCode())) {
-					tmp[i] = p;
-					i++;
-				}
-
-			}pizzas = tmp;
-		
+		pizzaList.remove(findPizzaByCode(codePizza));
 	}
 	
+	
+	//sort pizza by price in reversed order
+	public List<Pizza> sortPizzasByPriceReversed() {
+	
+		pizzaList.sort(Comparator.comparingDouble(Pizza::getPrix).reversed());
+		
+		return pizzaList;
+	}
+	
+	//sort pizza by code in order
+	public List<Pizza> sortPizzasByCode() {
+		
+		//pizzaList.sort((p1, p2)-> p1.getCode().compareToIgnoreCase(p2.getCode()));
+		
+		Collections.sort(pizzaList,new Comparator<Pizza>() {
+			@Override
+			public int compare(Pizza p1, Pizza p2) {
+				int result = p1.getCode().compareTo(p2.getCode());
+			  	return result; 	
+			}
+		});
+		return pizzaList;
+	}
 	
 
 }
