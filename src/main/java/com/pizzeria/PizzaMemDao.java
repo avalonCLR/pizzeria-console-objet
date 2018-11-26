@@ -6,6 +6,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.pizzeria.exception.StockageException;
+import com.pizzeria.exception.StockageException.DeletePizzaException;
+import com.pizzeria.exception.StockageException.SavePizzaException;
+import com.pizzeria.exception.StockageException.UpdatePizzaException;
+
 public class PizzaMemDao implements IPizzaDao {
 
 	//init pizzas in an array
@@ -55,12 +60,19 @@ public class PizzaMemDao implements IPizzaDao {
 	}
 	
 	//add a new pizza
-	public void saveNewPizza(Pizza pizza) {
-		pizzaList.add(pizza);
+	public void saveNewPizza(Pizza pizza) throws SavePizzaException{
+		
+		if(pizza.getCode().length() > 4) {
+			//calling non static inner class
+			throw new StockageException("").new SavePizzaException("Code pizza trop long, veuillez réessayer.");
+		}else {
+			pizzaList.add(pizza);
+			System.out.println("Nouvelle pizza ajoutée");
+		}
 	}
 
 	//modify existing pizza
-	public void updatePizza(String codePizza, Pizza pizza) {
+	public void updatePizza(String codePizza, Pizza pizza) throws UpdatePizzaException{
 		
 		if(pizzaExists(codePizza)==true) {
 		Pizza p = findPizzaByCode(codePizza);
@@ -68,14 +80,24 @@ public class PizzaMemDao implements IPizzaDao {
 		p.setCode(pizza.getCode());
 		p.setDesignation(pizza.getDesignation());
 		p.setPrix(pizza.getPrix());
+		
+		System.out.println("Mise à jour effectuée");
 		}else {
-			System.out.println("Pizza n'existe pas");
+			//calling non static inner class
+			throw new StockageException("").new UpdatePizzaException("Code pizza introuvable, veuillez réessayer.");
 		}		
 	}
 
 	//delete pizza
-	public void deletePizza(String codePizza) {
+	public void deletePizza(String codePizza) throws DeletePizzaException {
+		
+		if(pizzaExists(codePizza)==true) {
 		pizzaList.remove(findPizzaByCode(codePizza));
+		System.out.println("Pizza supprimée");
+		}else {
+			//calling non static inner class
+			throw new StockageException("").new DeletePizzaException("Impossible de supprimer la pizza, veuillez réessayer.");
+		}
 	}
 	
 	

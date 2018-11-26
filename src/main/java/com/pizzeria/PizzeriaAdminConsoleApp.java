@@ -2,6 +2,10 @@ package com.pizzeria;
 
 import java.util.Scanner;
 
+import com.pizzeria.exception.StockageException.DeletePizzaException;
+import com.pizzeria.exception.StockageException.SavePizzaException;
+import com.pizzeria.exception.StockageException.UpdatePizzaException;
+
 /**
  * Console d'administration comprenant un menu.
  * 
@@ -58,10 +62,12 @@ public class PizzeriaAdminConsoleApp {
 				System.out.println("Saisir le prix:");
 				prix = sc.nextDouble();
 
+				try {
 				dao.saveNewPizza(new Pizza(code, nom, prix));
+				}catch (SavePizzaException e){
+					System.out.println(e.getMessage());
+				}
 				
-				System.out.println("Nouvelle pizza ajoutée");
-
 				menuConsole();
 				choice = sc.nextInt();
 			}
@@ -85,9 +91,13 @@ public class PizzeriaAdminConsoleApp {
 
 				// parcours le tableau sans utiliser l'id
 
+				try {
 				dao.updatePizza(oldCode, new Pizza(newCode, newName, newPrice));
+				}catch (UpdatePizzaException e){
+					System.out.println(e.getMessage());
+				}
+				
 
-				System.out.println("Mise à jour effectuée");
 				menuConsole();
 				choice = sc.nextInt();
 			}
@@ -101,9 +111,12 @@ public class PizzeriaAdminConsoleApp {
 				sc.nextLine();
 				String oldCode = sc.nextLine();
 
-				dao.deletePizza(oldCode);
-
-				System.out.println("Pizza supprimée");
+				try {
+					dao.deletePizza(oldCode);
+				}catch (DeletePizzaException e) {
+					System.out.println(e.getMessage());
+				}
+				
 
 				menuConsole();
 				choice = sc.nextInt();
