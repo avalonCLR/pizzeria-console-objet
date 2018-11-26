@@ -20,7 +20,7 @@ public class PizzeriaAdminConsoleApp {
 	public static void main(String[] args) {
 
 		// appel du menu
-		menuConsole();
+		Pizza.menuConsole();
 
 		// choix utilisateur
 		int choice = sc.nextInt();
@@ -44,7 +44,7 @@ public class PizzeriaAdminConsoleApp {
 				
 				dao.findAllPizzas();
 
-				menuConsole();
+				Pizza.menuConsole();
 				choice = sc.nextInt();
 			}
 			if (choice == 2) {
@@ -52,6 +52,8 @@ public class PizzeriaAdminConsoleApp {
 
 				// ADD
 				//ajouter une pizza
+				
+				try {
 				System.out.println("Saisir le code:");
 				sc.nextLine();
 				code = sc.nextLine();
@@ -61,14 +63,13 @@ public class PizzeriaAdminConsoleApp {
 
 				System.out.println("Saisir le prix:");
 				prix = sc.nextDouble();
-
-				try {
+				
 				dao.saveNewPizza(new Pizza(code, nom, prix));
 				}catch (SavePizzaException e){
 					System.out.println(e.getMessage());
 				}
 				
-				menuConsole();
+				Pizza.menuConsole();
 				choice = sc.nextInt();
 			}
 			if (choice == 3) {
@@ -76,6 +77,8 @@ public class PizzeriaAdminConsoleApp {
 
 				// UPDATE
 				//modifier une pizza existante
+
+				try {
 				System.out.println("Saisir le code de la pizza à modifier");
 				sc.nextLine();
 				String oldCode = sc.nextLine();
@@ -91,34 +94,32 @@ public class PizzeriaAdminConsoleApp {
 
 				// parcours le tableau sans utiliser l'id
 
-				try {
 				dao.updatePizza(oldCode, new Pizza(newCode, newName, newPrice));
 				}catch (UpdatePizzaException e){
 					System.out.println(e.getMessage());
 				}
 				
-
-				menuConsole();
+				Pizza.menuConsole();
 				choice = sc.nextInt();
 			}
 			if (choice == 4) {
 
 				// DELETE
 				//effacer une pizza existante
+				
+				try {
 				System.out.println("Suppression d'une pizza");
 
 				System.out.println("Saisir le code de la pizza à modifier");
 				sc.nextLine();
 				String oldCode = sc.nextLine();
-
-				try {
+		
 					dao.deletePizza(oldCode);
 				}catch (DeletePizzaException e) {
 					System.out.println(e.getMessage());
 				}
 				
-
-				menuConsole();
+				Pizza.menuConsole();
 				choice = sc.nextInt();
 			} 
 			if(choice == 5) {
@@ -126,7 +127,7 @@ public class PizzeriaAdminConsoleApp {
 				//lister les pizzas par prix decroissant
 				dao.sortPizzasByPriceReversed();
 				
-				menuConsole();
+				Pizza.menuConsole();
 				choice = sc.nextInt();
 			}
 			if(choice == 6) {
@@ -134,32 +135,15 @@ public class PizzeriaAdminConsoleApp {
 				//lister les pizzas par code croissant
 				dao.sortPizzasByCode();
 				
-				
-				menuConsole();
+				Pizza.menuConsole();
 				choice = sc.nextInt();
 			}
 			else {
 				System.out.println("Please make a choice:");
-				menuConsole();
+				Pizza.menuConsole();
 				choice = sc.nextInt();
 			}
 		}
-
 		System.out.println("Au revoir");
-
 	}
-
-	
-	//affichage menu
-	public static void menuConsole() {
-		System.out.println("***Pizzeria Administration***");
-		System.out.println("[1] Lister les pizzas");
-		System.out.println("[2] Ajouter une nouvelle pizza");
-		System.out.println("[3] Mettre à jour une pizza");
-		System.out.println("[4] Supprimer une pizza");
-		System.out.println("[5] Lister par prix décroissant");
-		System.out.println("[6] Lister par code croissant");
-		System.out.println("[99] Sortir");
-	}
-
 }
