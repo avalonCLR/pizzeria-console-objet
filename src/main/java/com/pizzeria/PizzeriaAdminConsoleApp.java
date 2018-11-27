@@ -5,6 +5,7 @@ import java.util.Scanner;
 import com.pizzeria.exception.StockageException.DeletePizzaException;
 import com.pizzeria.exception.StockageException.SavePizzaException;
 import com.pizzeria.exception.StockageException.UpdatePizzaException;
+import com.pizzeria.model.CategoriePizzaEnum;
 
 /**
  * Console d'administration comprenant un menu.
@@ -29,11 +30,6 @@ public class PizzeriaAdminConsoleApp {
 		
 		PizzaMemDao dao = new PizzaMemDao();
 
-		String code;
-		String nom;
-		double prix;
-		int id;
-
 		// boucle while
 		while (choice != 99) {
 			if (choice == 1) {
@@ -44,6 +40,8 @@ public class PizzeriaAdminConsoleApp {
 				
 				dao.findAllPizzas();
 
+				
+				
 				Pizza.menuConsole();
 				choice = sc.nextInt();
 			}
@@ -56,15 +54,19 @@ public class PizzeriaAdminConsoleApp {
 				try {
 				System.out.println("Saisir le code:");
 				sc.nextLine();
-				code = sc.nextLine();
+				String code = sc.nextLine();
 
 				System.out.println("Saisir le nom (sans espace):");
-				nom = sc.nextLine();
+				String nom = sc.nextLine();
 
 				System.out.println("Saisir le prix:");
-				prix = sc.nextDouble();
+				double prix = sc.nextDouble();
+				sc.nextLine(); //fix scanner bug after double input
+				System.out.println("Saisir la categorie:");
+				System.out.println(CategoriePizzaEnum.toStringAll());
+				String cat = sc.nextLine().toUpperCase();
 				
-				dao.saveNewPizza(new Pizza(code, nom, prix));
+				dao.saveNewPizza(new Pizza(code, nom, prix, CategoriePizzaEnum.valueOf(cat)));
 				}catch (SavePizzaException e){
 					System.out.println(e.getMessage());
 				}
@@ -91,10 +93,15 @@ public class PizzeriaAdminConsoleApp {
 
 				System.out.println("Saisir le nouveau prix:");
 				double newPrice = sc.nextDouble();
+				sc.nextLine(); //fix scanner bug after double input 
+				System.out.println("Saisir la categorie:");
+				System.out.println(CategoriePizzaEnum.toStringAll());
+				String cat = sc.nextLine().toUpperCase();
 
+				
 				// parcours le tableau sans utiliser l'id
 
-				dao.updatePizza(oldCode, new Pizza(newCode, newName, newPrice));
+				dao.updatePizza(oldCode, new Pizza(newCode, newName, newPrice, CategoriePizzaEnum.valueOf(cat)));
 				}catch (UpdatePizzaException e){
 					System.out.println(e.getMessage());
 				}

@@ -1,6 +1,7 @@
 package com.pizzeria;
 
 import com.pizzeria.exception.StockageException;
+import com.pizzeria.model.CategoriePizzaEnum;
 
 /**
  * Creation de la classe pizza comprenant un nom, un code, un prix et un id.
@@ -16,14 +17,17 @@ public class Pizza {
 	private String designation = null;
 	private double prix;
 
+	CategoriePizzaEnum catEnum; //donner un nom pour utiliser l'enum
+	
 	private static int lastId = -1;
 
 	// generation du constructeur
-	public Pizza(String code, String designation, double prix) {
+	public Pizza(String code, String designation, double prix, CategoriePizzaEnum catEnum) {
 		this.id = ++lastId;
 		this.code = code;
 		this.designation = designation;
 		this.prix = prix;
+		this.catEnum = catEnum;
 	}
 
 	// generation des accesseurs
@@ -54,10 +58,19 @@ public class Pizza {
 	public void setPrix(double prix) {
 		this.prix = prix;
 	}
+	
+	
+	public CategoriePizzaEnum getCatEnum() {
+		return catEnum;
+	}
+
+	public void setCatEnum(CategoriePizzaEnum catEnum) {
+		this.catEnum = catEnum;
+	}
 
 	@Override
 	public String toString() {
-		return code + " -> " + designation + " (" + prix + "€)";
+		return code + " -> " + designation + " (" + prix + "€)"+" - "+ catEnum;
 	}
 
 	// affichage menu

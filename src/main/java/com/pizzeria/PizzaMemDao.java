@@ -10,6 +10,7 @@ import com.pizzeria.exception.StockageException;
 import com.pizzeria.exception.StockageException.DeletePizzaException;
 import com.pizzeria.exception.StockageException.SavePizzaException;
 import com.pizzeria.exception.StockageException.UpdatePizzaException;
+import com.pizzeria.model.CategoriePizzaEnum;
 
 public class PizzaMemDao implements IPizzaDao {
 
@@ -17,14 +18,14 @@ public class PizzaMemDao implements IPizzaDao {
 	private static int tailleTab = 8;
 	private static Pizza[] pizzas = new Pizza[tailleTab];
 	{
-	pizzas[0] = new Pizza("PEP", "Pépéroni", 12.50);
-	pizzas[1] = new Pizza("MAR", "Margherita", 14.00);
-	pizzas[2] = new Pizza("REIN", "La Reine", 11.50);
-	pizzas[3] = new Pizza("FRO", "La 4 fromages", 12.00);
-	pizzas[4] = new Pizza("CAN", "La cannibale", 12.50);
-	pizzas[5] = new Pizza("SAV", "La savoyarde", 13.00);
-	pizzas[6] = new Pizza("ORI", "L'orientale", 13.50);
-	pizzas[7] = new Pizza("IND", "L'indienne", 14.00);
+	pizzas[0] = new Pizza("PEP", "Pépéroni", 12.50, CategoriePizzaEnum.AUTRE);
+	pizzas[1] = new Pizza("MAR", "Margherita", 14.00, CategoriePizzaEnum.FROMAGE);
+	pizzas[2] = new Pizza("REIN", "La Reine", 11.50, CategoriePizzaEnum.AUTRE);
+	pizzas[3] = new Pizza("FRO", "La 4 fromages", 12.00, CategoriePizzaEnum.FROMAGE);
+	pizzas[4] = new Pizza("CAN", "La cannibale", 12.50, CategoriePizzaEnum.VIANDE);
+	pizzas[5] = new Pizza("SAV", "La savoyarde", 13.00, CategoriePizzaEnum.FROMAGE);
+	pizzas[6] = new Pizza("ORI", "L'orientale", 13.50, CategoriePizzaEnum.VIANDE);
+	pizzas[7] = new Pizza("IND", "L'indienne", 14.00, CategoriePizzaEnum.VIANDE);
 	}
 	
 	//put array in an arraylist
@@ -95,6 +96,7 @@ public class PizzaMemDao implements IPizzaDao {
 		p.setCode(pizza.getCode());
 		p.setDesignation(pizza.getDesignation());
 		p.setPrix(pizza.getPrix());
+		p.setCatEnum(pizza.getCatEnum());
 		
 		System.out.println("Mise à jour effectuée");
 		}
