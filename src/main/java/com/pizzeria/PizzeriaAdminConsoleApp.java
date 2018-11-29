@@ -39,8 +39,6 @@ public class PizzeriaAdminConsoleApp {
 				// affichage des pizzas
 				
 				dao.findAllPizzas();
-
-				
 				
 				Pizza.menuConsole();
 				choice = sc.nextInt();
