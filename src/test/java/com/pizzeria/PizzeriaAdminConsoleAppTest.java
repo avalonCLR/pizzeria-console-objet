@@ -16,23 +16,10 @@ public class PizzeriaAdminConsoleAppTest {
 
 	@Test
 	public void userInput() {
-		
 		assertNotNull(app.sc);
-		
 	}
 	
-	
-	@Test
-	public void userInputPrice(String input) {
-		
-		
-	}
-	
-	
-//	@Test
-//	public void testPizzaPrice() {
-//		
-//	}
+
 	
 	
 }

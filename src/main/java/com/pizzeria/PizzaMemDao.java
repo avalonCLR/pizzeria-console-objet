@@ -81,16 +81,16 @@ public class PizzaMemDao implements IPizzaDao {
 	//modify existing pizza
 	public void updatePizza(String codePizza, Pizza pizza) throws UpdatePizzaException{
 		
-		boolean ok = false;
+//		boolean ok = false;
+//		
+//		try{
+//			pizza.dataController();
+//			ok = true;
+//		}catch(Exception e){
+//			
+//		}
 		
-		try{
-			pizza.dataController();
-			ok = true;
-		}catch(Exception e){
-			throw new StockageException(e.getMessage()).new UpdatePizzaException(e.getMessage());
-		}
-		
-		if(pizzaExists(codePizza)==true & ok == true) {
+		if(pizzaExists(codePizza)==true) {
 		Pizza p = findPizzaByCode(codePizza);
 		
 		p.setCode(pizza.getCode());
@@ -99,6 +99,8 @@ public class PizzaMemDao implements IPizzaDao {
 		p.setCatEnum(pizza.getCatEnum());
 		
 		System.out.println("Mise à jour effectuée");
+		}else {
+			throw new StockageException("").new UpdatePizzaException("Mis à jour Pizza impossible");
 		}
 		
 	}
@@ -106,17 +108,19 @@ public class PizzaMemDao implements IPizzaDao {
 	//delete pizza
 	public void deletePizza(String codePizza) throws DeletePizzaException {
 		
-		boolean ok = false;
-		try{
-			findPizzaByCode(codePizza).dataController();
-			ok = true;
-		}catch(Exception e){
-			throw new StockageException("").new DeletePizzaException("Impossible de supprimer la pizza, veuillez réessayer.");
-		}
+		//boolean ok = false;
+//		try{
+//			findPizzaByCode(codePizza).dataController();
+//			ok = true;
+//		}catch(Exception e){
+//			
+//		}
 		
-		if(pizzaExists(codePizza)==true & ok == true) {
+		if(pizzaExists(codePizza)==true) {
 		pizzaList.remove(findPizzaByCode(codePizza));
 		System.out.println("Pizza supprimée");
+		}else {
+			throw new StockageException("").new DeletePizzaException("Impossible de supprimer la pizza, veuillez réessayer.");
 		}
 
 	}
