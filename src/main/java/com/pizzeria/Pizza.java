@@ -16,18 +16,26 @@ public class Pizza {
 	private String code = null;
 	private String designation = null;
 	private double prix;
-
-	CategoriePizzaEnum catEnum; //donner un nom pour utiliser l'enum
+	private Categorie categorie;
 	
-	private static int lastId = -1;
+	//private static int lastId = -1;
 
 	// generation du constructeur
-	public Pizza(String code, String designation, double prix, CategoriePizzaEnum catEnum) {
-		this.id = ++lastId;
+	public Pizza(int id, String code, String designation, double prix, Categorie categorie) {
+		this.id = id;
 		this.code = code;
 		this.designation = designation;
 		this.prix = prix;
-		this.catEnum = catEnum;
+		this.categorie = categorie;
+
+	}
+
+	public Pizza(String code, String designation, double prix, Categorie categorie) {
+		super();
+		this.code = code;
+		this.designation = designation;
+		this.prix = prix;
+		this.categorie = categorie;
 	}
 
 	// generation des accesseurs
@@ -60,17 +68,18 @@ public class Pizza {
 	}
 	
 	
-	public CategoriePizzaEnum getCatEnum() {
-		return catEnum;
+
+	public Categorie getCategorie() {
+		return categorie;
 	}
 
-	public void setCatEnum(CategoriePizzaEnum catEnum) {
-		this.catEnum = catEnum;
+	public void setCategorie(Categorie categorie) {
+		this.categorie = categorie;
 	}
 
 	@Override
 	public String toString() {
-		return code + " -> " + designation + " (" + prix + "€)"+" - "+ catEnum;
+		return id +" "+ code + " -> " + designation + " (" + prix + "€)"+" - "+ categorie;
 	}
 
 	// affichage menu
@@ -80,8 +89,8 @@ public class Pizza {
 		System.out.println("[2] Ajouter une nouvelle pizza");
 		System.out.println("[3] Mettre à jour une pizza");
 		System.out.println("[4] Supprimer une pizza");
-		System.out.println("[5] Lister par prix décroissant");
-		System.out.println("[6] Lister par code croissant");
+//		System.out.println("[5] Lister par prix décroissant");
+//		System.out.println("[6] Lister par code croissant");
 		System.out.println("[99] Sortir");
 	}
 

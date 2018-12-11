@@ -1,11 +1,12 @@
 package com.pizzeria;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.pizzeria.exception.StockageException.DeletePizzaException;
-import com.pizzeria.exception.StockageException.SavePizzaException;
-import com.pizzeria.exception.StockageException.UpdatePizzaException;
-import com.pizzeria.model.CategoriePizzaEnum;
+import com.pizzeria.dao.PizzaMemDao;
+import com.pizzeria.model.CategorieDao;
+import com.pizzeria.utils.Connector;
 
 /**
  * Console d'administration comprenant un menu.
@@ -20,6 +21,29 @@ public class PizzeriaAdminConsoleApp {
 
 	public static void main(String[] args) {
 
+		Connection co = null;
+		
+		try {
+			co = Connector.getConnection();
+			
+			System.out.println("Connected");
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			
+			try {
+			co.close();
+			System.out.println("Disconnected");
+			}catch(SQLException e) {
+				System.out.println(e.getErrorCode());
+			}
+		}
+		
+		Pizza piz;
+		int id_cat;
+		Categorie cat;
+		CategorieDao myCat = new CategorieDao();
+		
 		// appel du menu
 		Pizza.menuConsole();
 
@@ -27,7 +51,6 @@ public class PizzeriaAdminConsoleApp {
 		int choice = sc.nextInt();
 
 		// CREATE
-		
 		PizzaMemDao dao = new PizzaMemDao();
 
 		// boucle while
@@ -48,8 +71,6 @@ public class PizzeriaAdminConsoleApp {
 
 				// ADD
 				//ajouter une pizza
-				
-				try {
 				System.out.println("Saisir le code:");
 				sc.nextLine();
 				String code = sc.nextLine();
@@ -60,12 +81,21 @@ public class PizzeriaAdminConsoleApp {
 				System.out.println("Saisir le prix:");
 				double prix = sc.nextDouble();
 				sc.nextLine(); //fix scanner bug after double input
-				System.out.println("Saisir la categorie:");
-				System.out.println(CategoriePizzaEnum.toStringAll());
-				String cat = sc.nextLine().toUpperCase();
 				
-				dao.saveNewPizza(new Pizza(code, nom, prix, CategoriePizzaEnum.valueOf(cat)));
-				}catch (SavePizzaException e){
+				System.out.println("Veuillez saisir la categorie \n\r"
+ 						+ "° 1  Fromage \r\n"
+ 						+ "° 2  Viande \r\n"
+ 						+ "° 3  Poisson \r\n"
+ 						+ "° 4  Autre");
+ 				
+ 				id_cat = Integer.parseInt(sc.nextLine());
+ 				cat  = myCat.getOneCategorie(id_cat);
+ 				piz = new Pizza(code, nom, prix, cat);
+ 				
+ 				try {
+				dao.createPizza(piz);
+				
+				}catch (Exception e){
 					System.out.println(e.getMessage());
 				}
 				
@@ -77,30 +107,28 @@ public class PizzeriaAdminConsoleApp {
 
 				// UPDATE
 				//modifier une pizza existante
-
-				try {
 				System.out.println("Saisir le code de la pizza à modifier");
 				sc.nextLine();
-				String oldCode = sc.nextLine();
+				System.out.println("Veuillez saisir l'id de la pizza à modifier");
+ 				int id = Integer.parseInt(sc.nextLine()) ;
+ 				System.out.println("Veuillez saisir le nouveau code");
+ 				String code = sc.nextLine();
+ 				System.out.println("Veuillez saisir le nouveau nom :");
+ 				String name = sc.nextLine();
+ 				System.out.println("Veuillez saisir le nouveau prix:");
+ 				Double price = Double.valueOf(sc.nextLine());
+ 				System.out.println("Veuillez saisir la categorie \n\r"
+ 						+ "° tapez 1 pour Fromage \r\n"
+ 						+ "° 2 pour Viande \r\n"
+ 						+ "° 3 pour Poisson \r\n"
+ 						+ "° 4 pour Autre \r\n\"");
+ 				id_cat = Integer.parseInt(sc.nextLine());
+ 				cat  = myCat.getOneCategorie(id_cat);
+ 				piz = new Pizza(id, code, name, price, cat);
 
-				System.out.println("Saisir le nouveau code:");
-				String newCode = sc.nextLine();
-
-				System.out.println("Saisir le nouveau nom (sans espace):");
-				String newName = sc.nextLine();
-
-				System.out.println("Saisir le nouveau prix:");
-				double newPrice = sc.nextDouble();
-				sc.nextLine(); //fix scanner bug after double input 
-				System.out.println("Saisir la categorie:");
-				System.out.println(CategoriePizzaEnum.toStringAll());
-				String cat = sc.nextLine().toUpperCase();
-
-				
-				// parcours le tableau sans utiliser l'id
-
-				dao.updatePizza(oldCode, new Pizza(newCode, newName, newPrice, CategoriePizzaEnum.valueOf(cat)));
-				}catch (UpdatePizzaException e){
+				try {
+					dao.updatePizza(piz);
+				}catch (Exception e){
 					System.out.println(e.getMessage());
 				}
 				
@@ -111,38 +139,21 @@ public class PizzeriaAdminConsoleApp {
 
 				// DELETE
 				//effacer une pizza existante
-				
-				try {
 				System.out.println("Suppression d'une pizza");
 
-				System.out.println("Saisir le code de la pizza à modifier");
+				System.out.println("Saisir l'id de la pizza à modifier");
 				sc.nextLine();
-				String oldCode = sc.nextLine();
-		
-					dao.deletePizza(oldCode);
-				}catch (DeletePizzaException e) {
+				int id = Integer.parseInt(sc.nextLine());
+				try {
+					dao.deletePizza(id);
+				}catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
 				
 				Pizza.menuConsole();
 				choice = sc.nextInt();
 			} 
-			if(choice == 5) {
-				
-				//lister les pizzas par prix decroissant
-				dao.sortPizzasByPriceReversed();
-				
-				Pizza.menuConsole();
-				choice = sc.nextInt();
-			}
-			if(choice == 6) {
 			
-				//lister les pizzas par code croissant
-				dao.sortPizzasByCode();
-				
-				Pizza.menuConsole();
-				choice = sc.nextInt();
-			}
 			else {
 				System.out.println("Please make a choice:");
 				Pizza.menuConsole();
